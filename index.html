@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愚者教会-源堡之门</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #1a1a1a;
+            color: #c9a66b; 
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+        .fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 30, 40, 0.7);
+            z-index: -1;
+        }
+        .title {
+            text-align: center;
+            padding: 50px 0 20px;
+            font-size: 3em;
+            text-shadow: 0 0 10px #c9a66b;
+            z-index: 1; 
+            position: relative;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            color: #d8c3a5;
+            z-index: 1;
+            position: relative;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+            z-index: 1;
+            position: relative;
+        }
+        .btn {
+            padding: 15px 30px;
+            background: #2c2c3a;
+            border: 2px solid #c9a66b;
+            color: #c9a66b;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            box-shadow: 0 0 20px #c9a66b;
+            transform: scale(1.05);
+        }
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            color: #888;
+            background: rgba(26,26,26,0.5);
+            padding: 5px 0;
+            z-index: 1;
+        }
+        .func-btns {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1;
+        }
+        .func-btn {
+            padding: 10px 18px;
+            background: #2c2c3a;
+            border: 1px solid #c9a66b;
+            color: #c9a66b;
+            cursor: pointer;
+            border-radius: 50px;
+            position: relative;
+            overflow: visible;
+            transition: all 0.2s;
+            z-index: 1;
+        }
+        .func-btn:hover {
+            box-shadow: 0 0 15px #c9a66b;
+        }
+        .space-ripple {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(201,166,107,0.6) 0%, 
+                rgba(201,166,107,0.3) 40%, 
+                rgba(201,166,107,0) 80%);
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: 2;
+            animation: waterRipple 1s ease-out forwards;
+        }
+        .space-ripple:nth-child(2) {
+            animation-delay: 0.2s; 
+            background: radial-gradient(circle, 
+                rgba(201,166,107,0.4) 0%, 
+                rgba(201,166,107,0.2) 40%, 
+                rgba(201,166,107,0) 80%);
+        }
+        @keyframes waterRipple {
+            0% {
+                transform: translate(-50%, -50%) scale(0.3);
+                opacity: 1;
+            }
+            70% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.2em;
+                padding-top: 30px;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+            .func-btns {
+                top: 10px;
+                right: 10px;
+            }
+            .func-btn {
+                padding: 8px 14px;
+                font-size: 0.9em;
+            }
+        }
+        .coin {
+            position: absolute;
+            border-radius: 50%;
+            user-select: none;
+            box-shadow: 0 0 15px rgba(180, 150, 80, 0.6),
+                        inset 0 0 8px rgba(220, 200, 100, 0.4);
+            background: radial-gradient(circle at 30% 30%, #c8b686, #8b7d4e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 250, 200, 0.7);
+            font-size: 10px;
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 3; 
+        }
+        
+        .combo {
+            position: absolute;
+            font-family: 'Times New Roman', serif;
+            color: #c8b686;
+            font-size: 16px;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(180, 150, 80, 0.5);
+            pointer-events: none;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            white-space: nowrap;
+            transform: translateY(0) scale(1);
+            z-index: 3; 
+        }
+    </style>
+</head>
+<body>
+    <div class="fog"></div>
+    <div class="func-btns">
+        <button class="func-btn" onclick="setRandomBackground(event)">更换“门”</button>
+    </div>
+
+    <h1 class="title">愚者教会</h1>
+    <p class="subtitle">—— 奉愚者之名，登临灰雾殿堂——</p>
+    
+    <div class="nav">
+        <a href="论坛链接" class="btn" onclick="addClickEffect(event)">塔罗会议事厅（论坛）</a>
+        <a href="测试链接" class="btn" onclick="addClickEffect(event)">非凡途径测试</a>
+    </div>
+
+    <div class="footer">
+        <p>本站为《诡秘之主》爱好者非盈利同人社区，版权归原作者所有 | 源堡编号：XXXX</p>
+    </div>
+
+    <div class="combo"></div>
+
+    <script>
+        const backgroundImages = [
+            "https://cdn.pixabay.com/photo/2024/09/26/09/42/ai-generated-9075735_1280.jpg",
+            "https://cdn.pixabay.com/photo/2025/02/08/18/42/ai-generated-9392968_1280.png",
+            "https://cdn.pixabay.com/photo/2023/12/21/01/15/landscape-8460996_1280.jpg",
+            "https://cdn.pixabay.com/photo/2012/02/18/22/52/church-14688_1280.jpg",
+            "https://cdn.pixabay.com/photo/2017/08/18/21/10/cologne-2656573_1280.jpg",
+            "https://cdn.pixabay.com/photo/2023/06/18/15/49/ship-8072337_1280.jpg",
+            "https://cdn.pixabay.com/photo/2018/03/30/05/44/tree-3274455_1280.jpg"
+        ];
+
+        function setRandomBackground(event) {
+            addClickEffect(event); 
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            document.body.style.backgroundImage = `url(${backgroundImages[randomIndex]})`;
+        }
+        function addClickEffect(event) {
+            const btn = event.currentTarget;
+            const rect = btn.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            for (let i = 0; i < 2; i++) {
+                const ripple = document.createElement('div');
+                ripple.className = 'space-ripple';
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                btn.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1200);
+            }
+        }
+
+        window.onload = () => {
+            const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+            document.body.style.backgroundImage = `url(${backgroundImages[randomIndex]})`;
+        };
+
+        const body = document.querySelector('body');
+        const comboDisplay = document.querySelector('.combo');
+        const coins = [];
+        let comboCount = 0;
+        let lastClickTime = 0;
+        const COMBO_THRESHOLD = 400;
+
+        body.addEventListener('click', function(e) {
+            const now = Date.now();
+            
+            if (now - lastClickTime < COMBO_THRESHOLD) {
+                comboCount++;
+                if (comboCount >= 2) {
+                    showCombo(e); 
+                }
+            } else {
+                comboCount = 1;
+            }
+            lastClickTime = now;
+
+            const coinCount = Math.min(2 + Math.floor(comboCount / 5), 6);
+            for (let i = 0; i < coinCount; i++) {
+                createCoin(e);
+            }
+        });
+
+        function showCombo(e) {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            comboDisplay.textContent = `赞美愚者×${comboCount}`;
+            const textWidth = comboDisplay.offsetWidth;
+            
+            comboDisplay.style.left = `${mouseX - textWidth/2}px`;
+            comboDisplay.style.top = `${mouseY - 50}px`;
+            
+            comboDisplay.style.opacity = '0.9';
+            comboDisplay.style.transform = 'translateY(0) scale(1)';
+            
+            clearTimeout(comboDisplay.comboTimeout);
+            comboDisplay.comboTimeout = setTimeout(() => {
+                comboDisplay.style.opacity = '0';
+                comboDisplay.style.transform = 'translateY(-15px) scale(0.9)'; 
+            }, 600);
+        }
+
+        function createCoin(e) {
+            const coin = document.createElement('div');
+            coin.className = 'coin';
+            const symbols = ['✧', '✦', '✶', '✹', '✺'];
+            coin.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            body.appendChild(coin);
+            
+            const size = Math.random() * 6 + 18;
+            const spread = 1.5 + (comboCount / 8);
+            const dx = (Math.random() - 0.5) * spread;
+            const dy = (Math.random() - 0.7) * spread;
+            
+            coins.push({
+                element: coin,
+                top: e.clientY - size/2,
+                left: e.clientX - size/2,
+                opacity: 0.8,
+                size: size,
+                dx: dx,
+                dy: dy,
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 3
+            });
+            
+            animate();
+        }
+
+        function animate() {
+            for (let i = 0; i < coins.length; i++) {
+                const coin = coins[i];
+                
+                if (coin.opacity <= 0) {
+                    body.removeChild(coin.element);
+                    coins.splice(i, 1);
+                    i--;
+                    continue;
+                }
+                
+                coin.top += coin.dy;
+                coin.left += coin.dx;
+                coin.opacity -= 0.008;
+                coin.dy += 0.02;
+                coin.rotation += coin.rotationSpeed;
+                
+                coin.element.style.cssText = `
+                    top: ${coin.top}px;
+                    left: ${coin.left}px;
+                    width: ${coin.size}px;
+                    height: ${coin.size}px;
+                    opacity: ${coin.opacity};
+                    transform: rotate(${coin.rotation}deg);
+                    z-index: 3;
+                `;
+            }
+            
+            if (coins.length > 0) {
+                requestAnimationFrame(animate);
+            }
+        }
+    </script>
+</body>
+</html>
